@@ -5,14 +5,25 @@ import AudioPlayer from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
 
 export default function Playing() {
-  const { song, handleSetSong } = useContext(Songs);
+  const { DataSongs, song, handleSetSong } = useContext(Songs);
 
   const handleClickNext = () => {
-    handleSetSong(song.id + 1);
+    if(song.id + 1 >= DataSongs.length) {
+      handleSetSong(0)
+    } else {
+      handleSetSong(song.id + 1);
+    }
   };
   const handleClickPrevious = () => {
-    handleSetSong(song.id - 1);
+    if(song.id - 1 < 0) {
+      handleSetSong(DataSongs.length - 1)
+    } else {
+      handleSetSong(song.id - 1);
+    }
   };
+  const handleAudioEnd = () => {
+    handleClickNext()
+  }
 
   return (
     <div>
@@ -23,6 +34,7 @@ export default function Playing() {
         showSkipControls={true}
         onClickNext={handleClickNext}
         onClickPrevious={handleClickPrevious}
+        onEnded={handleAudioEnd}
       />
     </div>
   );
